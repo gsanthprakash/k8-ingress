@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app2
-  labels:
+  labels: # these labels belong to deployment
     app: app2
 spec:
   replicas: 1
   selector:
-    matchLabels:
+    matchLabels: # these labels should match with pod
       app: app2
-  template:
+  template: # this is the pod definition
     metadata:
       labels:
         app: app2
@@ -30,29 +30,28 @@ spec:
   ports:
   - name: name-of-service-port
     protocol: TCP
-    port: 80
-    targetPort: 80
----
+    port: 80 # this port belongs to service
+    targetPort: 80 # this port belongs to container
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app2
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/tags: Environment=dev,Team=test,Project=Roboshop
-    alb.ingress.kubernetes.io/group.name: gspvsr
+    name: app2
+    annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/tags: Environment=dev,Project=roboshop
+        alb.ingress.kubernetes.io/group.name: gspvsr
 spec:
   ingressClassName: alb
   rules:
-    - host: "app2.gspaws.online"
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: app2
-                port:
-                  number: 80
+  - host: "app2.gspaws.online"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app2
+            port:
+              number: 80
