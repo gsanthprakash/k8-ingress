@@ -46,11 +46,11 @@ spec:
   rules:
   - host: "app1.gspaws.online"
     http:
-    paths:
-    - path: /
-      pathtype: Prefix
-      backend:
-        service:
-          name: app1
-          port:
-            number: 80
+      paths:
+      - path: /
+        pathtype: Prefix
+        backend:
+          service:
+            name: app1
+            port:
+              number: 80  
