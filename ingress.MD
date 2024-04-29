@@ -33,3 +33,22 @@ eksctl utils associate-iam-oidc-provider \
 5. helm repo add eks https://aws.github.io/eks-charts
 
 6. helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=eks-spot-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+
+
+
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: echoserver
+    namespace: echoserver
+    annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/subnets: subnet-05e1c98ed0f5b109e,subnet-07f5bb81f661df61b,subnet-0a4e6232630820516
+        alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+spec:
+    rules:
+    - host: echoserver.example.com
+        http:
+        paths:
